@@ -22,11 +22,11 @@ const allSuit = {
 const input = [
   { 
     name:'ivanov1',
-    cards:['2H','2S','TS','5S','TS']
+    cards:['KH','2H','TH','5H','TH']
   },
   { 
     name:'petrov',
-    cards:['KS','KH','TS','QS','9S']
+    cards:['KS','KS','TS','QS','9S']
   },
   { 
     name:'sidrov',
@@ -38,9 +38,9 @@ const input = [
   }
 ]
 
-  function isHighCard(cards){
-    return [cards[0].face]
-  }
+function isHighCard(cards){
+  return [cards[0].face]
+}
 
 function isPairs(cards){
   const cardOccurences = {}
@@ -106,19 +106,19 @@ function isSet(cards){
   return result
 }
 
-  function isStraight(cards){
-    let result = true
-  
-    for( let i = 0; i < cards.length; i++) {
-      if (cards[i].face != cards[0].face-i) {
-        result = false
-      }
+function isStraight(cards){
+  let result = true
+
+  for( let i = 0; i < cards.length; i++) {
+    if (cards[i].face != cards[0].face-i) {
+      result = false
     }
-    if (result) {
-      return [cards[0].face]
-    }
-    return []
-  } 
+  }
+  if (result) {
+    return [cards[0].face]
+  }
+  return []
+} 
 
 function isFlush(cards){
   let result = true
@@ -127,10 +127,10 @@ function isFlush(cards){
         result = false
       }
     } 
-    //console.log(result)
   if (result) {
-
-    return [cards[0].face]
+    return cards.map((card) => {
+      return card.face
+    })
   }
   return []
 }
@@ -166,129 +166,123 @@ function isQuadro(cards){
   return result
 }
 
-  function isStraightFlush(cards) {
-    const straight = isStraight(cards)
-    const flush = isFlush(cards)
-    if (straight.length && flush.length) {
+function isStraightFlush(cards) {
+  const straight = isStraight(cards)
+  const flush = isFlush(cards)
+  if (straight.length && flush.length) {
+    return [cards[0].face]
+  } 
+
+  return []
+}
+
+function isRoyalFlush(cards) {
+    const isAce = cards[0].face === allFace['A']
+    const straightFlush = isStraightFlush(cards)
+    if (isAce && straightFlush.length) {
       return [cards[0].face]
     } 
 
-    return []
-  }
-
-  function isRoyalFlush(cards) {
-     const isAce = cards[0].face === allFace['A']
-     const straightFlush = isStraightFlush(cards)
-      if (isAce && straightFlush.length) {
-        return [cards[0].face]
-      } 
-
-  return []
-  }
+return []
+}
 
 
 const parsed = input.map((item) => {
- const parsedcards = item.cards.map((card) => {
-   const face = card[0]
-   const suit = card[1]
-   return {
-     face: allFace[face],
-     suit: allSuit[suit]
-   }
- })
- parsedcards.sort((a, b) => {
-   return b.face - a.face
- })
- 
+  const parsedcards = item.cards.map((card) => {
+    const face = card[0]
+    const suit = card[1]
+      return {
+        face: allFace[face],
+        suit: allSuit[suit]
+      }
+  })
 
- let combination
+  parsedcards.sort((a, b) => {
+    return b.face - a.face
+  })
  
- const highCard = isHighCard(parsedcards)
- const pair = isPairs(parsedcards)
- const doublePair = isTwoPairs(parsedcards)
- const set = isSet(parsedcards)
- const straight = isStraight(parsedcards)
- const flush = isFlush(parsedcards)
- const fullHouse = isFullHouse(parsedcards)
- const quadro = isQuadro(parsedcards)
- const straightFlush = isStraightFlush(parsedcards)
- const royalFlush = isRoyalFlush(parsedcards)
-
+  let combination
+  const highCard = isHighCard(parsedcards)
+  const pair = isPairs(parsedcards)
+  const doublePair = isTwoPairs(parsedcards)
+  const set = isSet(parsedcards)
+  const straight = isStraight(parsedcards)
+  const flush = isFlush(parsedcards)
+  const fullHouse = isFullHouse(parsedcards)
+  const quadro = isQuadro(parsedcards)
+  const straightFlush = isStraightFlush(parsedcards)
+  const royalFlush = isRoyalFlush(parsedcards)
 
   if (royalFlush.length){
     combination = {
-    combo: 10,
-    kicker: royalFlush
+      combo: 10,
+      kicker: royalFlush
     }
   } else if (straightFlush.length){
-      combination = {
+    combination = {
       combo: 9,
       kicker: straightFlush
-      }
+    }
   } else if (quadro.length){
-      combination = {
+    combination = {
       combo: 8,
       kicker: quadro
-      }
+    }
   } else if (fullHouse.length) {
-      combination = {
+    combination = {
       combo: 7,
       kicker: fullHouse
-      }
-  } else  if (flush.length) {
-      combination = {
+    }
+  } else if (flush.length) {
+    combination = {
       combo: 6,
       kicker: flush
-      }
+    }
   } else if (straight.length) {
-      combination = {
+    combination = {
       combo: 5,
       kicker: straight
-      }
+    }
   } else if (set.length) {
-      combination = {
+    combination = {
       combo: 4,
       kicker: set
-      }
+    }
   } else if (doublePair.length == 2) {
-      combination = {
+    combination = {
       combo: 3,
       kicker: doublePair
-      }
+    }
   } else if (pair.length) {
-      combination = {
+    combination = {
       combo: 2,
       kicker: pair
-      }
-  } else {
-      combination = {
-        combo: 1,
-        kicker: highCard
-      }
     }
+  } else {
+    combination = {
+      combo: 1,
+      kicker: highCard
+    }
+  }
  
-
- return {
-   name: item.name,
-   cards: item.cards,
-   combination: combination
- }
+  return {
+    name: item.name,
+    cards: item.cards,
+    combination: combination
+  }
 })
 
 parsed.sort((a, b) => {
   if(a.combination.combo === b.combination.combo) {
-    if(a.combination.kicker.length > 1 && b.combination.kicker.length > 1){
-      return b.combination.kicker[1] - a.combination.kicker[1]
+    for (let i = 0; i < a.combination.kicker.length; i++) {
+      if(a.combination.kicker[i] !== b.combination.kicker[i]){
+        return b.combination.kicker[i] - a.combination.kicker[i]
+      }
     }
-    return b.combination.kicker[0] - a.combination.kicker[0]
   }
   return b.combination.combo - a.combination.combo
 })
 
-
-
-console.log(parsed);
-//console.log(parsed)
-//console.log(JSON.stringify(parsed,null,3))
+console.log(JSON.stringify(parsed,null,3))
 
 
