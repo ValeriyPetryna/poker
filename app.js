@@ -21,44 +21,20 @@ const allSuit = {
 }
 const input = [
   { 
-    name:'ivanov',
-    cards:['AS','KS','QS','JS','TS']
+    name:'ivanov1',
+    cards:['2H','2S','TS','5S','TS']
   },
   { 
-    name:'ivanov',
-    cards:['KS','JS','TS','QS','9S']
+    name:'petrov',
+    cards:['KS','KH','TS','QS','9S']
   },
   { 
-    name:'ivanov',
+    name:'sidrov',
     cards:['4S','4H','4S','4S','9S']
   },
   { 
-    name:'ivanov',
-    cards:['JS','JH','JS','5S','5S']
-  },
-  { 
-    name:'ivanov',
-    cards:['KS','5S','KS','5S','9S']
-  },
-  { 
-    name:'ivanov',
-    cards:['5S','8H','7S','6S','9S']
-  },
-  { 
-    name:'ivanov',
-    cards:['KS','KH','KS','5S','9S']
-  },
-  { 
-    name:'ivanov',
-    cards:['KS','KH','5S','5S','9S']
-  },
-  { 
-    name:'ivanov',
-    cards:['KS','KH','8S','5S','9S']
-  },
-  { 
-    name:'ivanov',
-    cards:['KS','JH','2S','5S','9S']
+    name:'ivanov2',
+    cards:['3S','JH','3S','TS','TS']
   }
 ]
 
@@ -298,7 +274,21 @@ const parsed = input.map((item) => {
    combination: combination
  }
 })
+
+parsed.sort((a, b) => {
+  if(a.combination.combo === b.combination.combo) {
+    if(a.combination.kicker.length > 1 && b.combination.kicker.length > 1){
+      return b.combination.kicker[1] - a.combination.kicker[1]
+    }
+    return b.combination.kicker[0] - a.combination.kicker[0]
+  }
+  return b.combination.combo - a.combination.combo
+})
+
+
+
+console.log(parsed);
 //console.log(parsed)
-console.log(JSON.stringify(parsed,null,3))
+//console.log(JSON.stringify(parsed,null,3))
 
 
