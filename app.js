@@ -19,6 +19,20 @@ const allSuit = {
   C:3,
   H:4,
 }
+
+const allCombo = {
+  1:'High Card',
+  2:'Pair',
+  3:'Two Pairs',
+  4:'Triple',
+  5:'Straight',
+  6:'Flush',
+  7:'Full House',
+  8:'Quadro',
+  9:'Straight Flush',
+  10:'Royal Flush'
+}
+
 const input = [
   { 
     name:'ivanov1',
@@ -283,6 +297,9 @@ parsed.sort((a, b) => {
   return b.combination.combo - a.combination.combo
 })
 
-console.log(JSON.stringify(parsed,null,3))
+//console.log(JSON.stringify(parsed,null,3))
+//console.log(parsed)
 
-
+parsed.forEach(function (item, index) {
+  console.log(index + 1 + '. ' + item.name + ' with combo: ' + allCombo[item.combination.combo]+ ', kicker: ' + item.combination.kicker)
+})
