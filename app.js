@@ -36,19 +36,19 @@ const allCombo = {
 const input = [
   { 
     name:'ivanov1',
-    cards:['KH','2H','TH','5H','TH']
+    cards:['2H','2H','2S','5H','TH']
   },
   { 
     name:'petrov',
-    cards:['KS','KS','TS','QS','9S']
+    cards:['KS','3S','TS','6S','9H']
   },
   { 
     name:'sidrov',
-    cards:['4S','4H','4S','4S','9S']
+    cards:['4S','4H','4S','4H','QS']
   },
   { 
     name:'ivanov2',
-    cards:['3S','JH','3S','TS','TS']
+    cards:['3S','JH','5S','6S','TS']
   }
 ]
 
@@ -214,7 +214,7 @@ const parsed = input.map((item) => {
   parsedcards.sort((a, b) => {
     return b.face - a.face
   })
- 
+  
   let combination
   const highCard = isHighCard(parsedcards)
   const pair = isPairs(parsedcards)
@@ -227,6 +227,7 @@ const parsed = input.map((item) => {
   const straightFlush = isStraightFlush(parsedcards)
   const royalFlush = isRoyalFlush(parsedcards)
 
+  
   if (royalFlush.length){
     combination = {
       combo: 10,
@@ -278,7 +279,7 @@ const parsed = input.map((item) => {
       kicker: highCard
     }
   }
- 
+  
   return {
     name: item.name,
     cards: item.cards,
@@ -298,8 +299,24 @@ parsed.sort((a, b) => {
 })
 
 //console.log(JSON.stringify(parsed,null,3))
-//console.log(parsed)
 
+let list = []
 parsed.forEach(function (item, index) {
-  console.log(index + 1 + '. ' + item.name + ' with combo: ' + allCombo[item.combination.combo]+ ', kicker: ' + item.combination.kicker)
+  let str = (index + 1 + '. ' + item.name + ' with combo: ' + allCombo[item.combination.combo]+ ', kicker: ' + item.combination.kicker)
+  list.push(str)
+
 })
+
+module.exports = {
+  isHighCard,
+  isPairs,
+  isTwoPairs,
+  isSet,
+  isStraight,
+  isFlush,
+  isFullHouse,
+  isQuadro,
+  isStraightFlush,
+  isRoyalFlush,
+  list
+}
